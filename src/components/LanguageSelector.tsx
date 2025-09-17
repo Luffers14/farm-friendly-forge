@@ -1,37 +1,19 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-interface Language {
-  code: string;
-  name: string;
-  flag: string;
-}
-
-const languages: Language[] = [
-  { code: "hi", name: "हिंदी", flag: "🇮🇳" },
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "ta", name: "தமிழ்", flag: "🇮🇳" },
-  { code: "te", name: "తెలుగు", flag: "🇮🇳" },
-  { code: "mr", name: "मराठी", flag: "🇮🇳" },
-  { code: "gu", name: "ગુજરાતી", flag: "🇮🇳" },
-  { code: "pa", name: "ਪੰਜਾਬੀ", flag: "🇮🇳" },
-  { code: "bn", name: "বাংলা", flag: "🇮🇳" },
-  { code: "kn", name: "ಕನ್ನಡ", flag: "🇮🇳" },
-  { code: "ml", name: "മലയാളം", flag: "🇮🇳" },
-  { code: "or", name: "ଓଡ଼ିଆ", flag: "🇮🇳" },
-  { code: "as", name: "অসমীয়া", flag: "🇮🇳" },
-];
+import { useLanguage, languages } from "@/contexts/LanguageContext";
 
 interface LanguageSelectorProps {
-  onLanguageSelect: (language: Language) => void;
+  onLanguageSelect: (language: any) => void;
 }
 
 export function LanguageSelector({ onLanguageSelect }: LanguageSelectorProps) {
-  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const { setCurrentLanguage } = useLanguage();
+  const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
 
-  const handleLanguageSelect = (language: Language) => {
+  const handleLanguageSelect = (language: any) => {
     setSelectedLanguage(language);
+    setCurrentLanguage(language);
     onLanguageSelect(language);
   };
 

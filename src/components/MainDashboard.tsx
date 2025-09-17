@@ -17,6 +17,9 @@ import {
   BarChart3,
   Bell
 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SeedBank } from "@/components/SeedBank";
 
 interface MainDashboardProps {
   farmerName?: string;
@@ -25,12 +28,13 @@ interface MainDashboardProps {
 
 export function MainDashboard({ farmerName = "किसान भाई", onLogout }: MainDashboardProps) {
   const [activeSection, setActiveSection] = useState("dashboard");
+  const { t, currentLanguage } = useLanguage();
 
   const getCurrentGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "सुप्रभात";
-    if (hour < 17) return "नमस्ते";
-    return "शुभ संध्या";
+    if (hour < 12) return t("greeting_morning");
+    if (hour < 17) return t("greeting_afternoon");
+    return t("greeting_evening");
   };
 
   return (
@@ -42,21 +46,22 @@ export function MainDashboard({ farmerName = "किसान भाई", onLogo
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-bold text-crop">🌾 KrishiDwar</h1>
               <Badge variant="secondary" className="hidden sm:inline-flex">
-                डिजिटल कृषि प्लेटफॉर्म
+                {currentLanguage.code === 'en' ? 'Digital Agriculture Platform' : 'डिजिटल कृषि प्लेटफॉर्म'}
               </Badge>
             </div>
             
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full"></div>
               </Button>
               <div className="hidden sm:block text-right">
                 <p className="text-sm font-medium">{getCurrentGreeting()}, {farmerName}</p>
-                <p className="text-xs text-muted-foreground">आज का दिन शुभ हो</p>
+                <p className="text-xs text-muted-foreground">{t("have_a_good_day")}</p>
               </div>
               <Button variant="outline" size="sm" onClick={onLogout}>
-                लॉगआउट
+                {t("logout")}
               </Button>
             </div>
           </div>
@@ -77,7 +82,7 @@ export function MainDashboard({ farmerName = "किसान भाई", onLogo
                     onClick={() => setActiveSection(item.id)}
                   >
                     <item.icon className="w-5 h-5" />
-                    <span className="hidden sm:inline">{item.label}</span>
+                    <span className="hidden sm:inline">{t(item.label)}</span>
                   </Button>
                 ))}
               </nav>
@@ -92,6 +97,7 @@ export function MainDashboard({ farmerName = "किसान भाई", onLogo
             {activeSection === "learning" && <LearningContent />}
             {activeSection === "community" && <CommunityContent />}
             {activeSection === "schemes" && <SchemesContent />}
+            {activeSection === "seed-bank" && <SeedBank />}
           </div>
         </div>
       </div>
@@ -100,12 +106,14 @@ export function MainDashboard({ farmerName = "किसान भाई", onLogo
 }
 
 function DashboardContent() {
+  const { t } = useLanguage();
+  
   return (
     <div className="space-y-6">
       {/* Weather Card */}
       <Card className="p-6 bg-gradient-earth shadow-medium">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold">आज का मौसम</h3>
+          <h3 className="text-xl font-semibold">{t("todays_weather")}</h3>
           <Badge variant="secondary">दिल्ली, भारत</Badge>
         </div>
         
@@ -114,35 +122,35 @@ function DashboardContent() {
             <Thermometer className="w-8 h-8 text-destructive" />
             <div>
               <p className="text-2xl font-bold">28°C</p>
-              <p className="text-sm text-muted-foreground">तापमान</p>
+              <p className="text-sm text-muted-foreground">{t("temperature")}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Droplets className="w-8 h-8 text-sky-blue" />
             <div>
               <p className="text-2xl font-bold">65%</p>
-              <p className="text-sm text-muted-foreground">नमी</p>
+              <p className="text-sm text-muted-foreground">{t("humidity")}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Wind className="w-8 h-8 text-muted-foreground" />
             <div>
               <p className="text-2xl font-bold">12 km/h</p>
-              <p className="text-sm text-muted-foreground">हवा</p>
+              <p className="text-sm text-muted-foreground">{t("wind")}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Cloud className="w-8 h-8 text-sky-blue" />
             <div>
               <p className="text-2xl font-bold">2.5mm</p>
-              <p className="text-sm text-muted-foreground">बारिश</p>
+              <p className="text-sm text-muted-foreground">{t("rainfall")}</p>
             </div>
           </div>
         </div>
         
         <div className="mt-4 p-3 bg-card/50 rounded-lg">
           <p className="text-sm">
-            <strong>सलाह:</strong> फसल की सिंचाई के लिए अच्छा समय है। आज खाद डालने की सलाह दी जाती है।
+            <strong>{t("advice")}:</strong> {t("weather_advice")}
           </p>
         </div>
       </Card>
@@ -156,7 +164,7 @@ function DashboardContent() {
             </div>
             <div>
               <p className="text-2xl font-bold">1</p>
-              <p className="text-sm text-muted-foreground">दिन की लकीर</p>
+              <p className="text-sm text-muted-foreground">{t("daily_streak")}</p>
             </div>
           </div>
         </Card>
@@ -168,7 +176,7 @@ function DashboardContent() {
             </div>
             <div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-sm text-muted-foreground">कुल व्यापार</p>
+              <p className="text-sm text-muted-foreground">{t("total_trades")}</p>
             </div>
           </div>
         </Card>
@@ -180,7 +188,7 @@ function DashboardContent() {
             </div>
             <div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-sm text-muted-foreground">पॉइंट्स</p>
+              <p className="text-sm text-muted-foreground">{t("points")}</p>
             </div>
           </div>
         </Card>
@@ -188,19 +196,19 @@ function DashboardContent() {
 
       {/* Quick Actions */}
       <Card className="p-6">
-        <h3 className="text-xl font-semibold mb-4">त्वरित कार्य</h3>
+        <h3 className="text-xl font-semibold mb-4">{t("quick_actions")}</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Button variant="farmer" className="h-16 flex-col gap-2">
             <Leaf className="w-6 h-6" />
-            फसल की सिफारिश
+            {t("crop_recommendation")}
           </Button>
           <Button variant="earth" className="h-16 flex-col gap-2">
             <Sprout className="w-6 h-6" />
-            बीज बैंक देखें
+            {t("view_seed_bank")}
           </Button>
           <Button variant="outline" className="h-16 flex-col gap-2">
             <BookOpen className="w-6 h-6" />
-            नई तकनीक सीखें
+            {t("learn_new_techniques")}
           </Button>
         </div>
       </Card>
@@ -209,55 +217,81 @@ function DashboardContent() {
 }
 
 function WeatherContent() {
+  const { t, currentLanguage } = useLanguage();
   return (
     <Card className="p-6">
-      <h3 className="text-2xl font-semibold mb-6">मौसम की विस्तृत जानकारी</h3>
-      <p className="text-muted-foreground">विस्तृत मौसम की जानकारी यहां दिखाई जाएगी...</p>
+      <h3 className="text-2xl font-semibold mb-6">
+        {currentLanguage.code === 'en' ? 'Detailed Weather Information' : 'मौसम की विस्तृत जानकारी'}
+      </h3>
+      <p className="text-muted-foreground">
+        {currentLanguage.code === 'en' ? 'Detailed weather information will be displayed here...' : 'विस्तृत मौसम की जानकारी यहां दिखाई जाएगी...'}
+      </p>
     </Card>
   );
 }
 
 function CropRecommendationContent() {
+  const { t, currentLanguage } = useLanguage();
   return (
     <Card className="p-6">
-      <h3 className="text-2xl font-semibold mb-6">स्मार्ट फसल सिफारिश</h3>
-      <p className="text-muted-foreground">फसल सिफारिश सिस्टम यहां होगा...</p>
+      <h3 className="text-2xl font-semibold mb-6">
+        {currentLanguage.code === 'en' ? 'Smart Crop Recommendations' : 'स्मार्ट फसल सिफारिश'}
+      </h3>
+      <p className="text-muted-foreground">
+        {currentLanguage.code === 'en' ? 'Crop recommendation system will be here...' : 'फसल सिफारिश सिस्टम यहां होगा...'}
+      </p>
     </Card>
   );
 }
 
 function LearningContent() {
+  const { t, currentLanguage } = useLanguage();
   return (
     <Card className="p-6">
-      <h3 className="text-2xl font-semibold mb-6">सीखने का केंद्र</h3>
-      <p className="text-muted-foreground">कृषि शिक्षा सामग्री यहां उपलब्ध होगी...</p>
+      <h3 className="text-2xl font-semibold mb-6">
+        {currentLanguage.code === 'en' ? 'Learning Center' : 'सीखने का केंद्र'}
+      </h3>
+      <p className="text-muted-foreground">
+        {currentLanguage.code === 'en' ? 'Agriculture learning materials will be available here...' : 'कृषि शिक्षा सामग्री यहां उपलब्ध होगी...'}
+      </p>
     </Card>
   );
 }
 
 function CommunityContent() {
+  const { t, currentLanguage } = useLanguage();
   return (
     <Card className="p-6">
-      <h3 className="text-2xl font-semibold mb-6">किसान समुदाय</h3>
-      <p className="text-muted-foreground">समुदाय चर्चा और सवाल-जवाब यहां होगा...</p>
+      <h3 className="text-2xl font-semibold mb-6">
+        {currentLanguage.code === 'en' ? 'Farmer Community' : 'किसान समुदाय'}
+      </h3>
+      <p className="text-muted-foreground">
+        {currentLanguage.code === 'en' ? 'Community discussions and Q&A will be here...' : 'समुदाय चर्चा और सवाल-जवाब यहां होगा...'}
+      </p>
     </Card>
   );
 }
 
 function SchemesContent() {
+  const { t, currentLanguage } = useLanguage();
   return (
     <Card className="p-6">
-      <h3 className="text-2xl font-semibold mb-6">सरकारी योजनाएं</h3>
-      <p className="text-muted-foreground">सरकारी योजनाओं की जानकारी यहां मिलेगी...</p>
+      <h3 className="text-2xl font-semibold mb-6">
+        {currentLanguage.code === 'en' ? 'Government Schemes' : 'सरकारी योजनाएं'}
+      </h3>
+      <p className="text-muted-foreground">
+        {currentLanguage.code === 'en' ? 'Information about government schemes will be available here...' : 'सरकारी योजनाओं की जानकारी यहां मिलेगी...'}
+      </p>
     </Card>
   );
 }
 
 const navigationItems = [
-  { id: "dashboard", label: "डैशबोर्ड", icon: BarChart3 },
-  { id: "weather", label: "मौसम", icon: Cloud },
-  { id: "crops", label: "फसल सुझाव", icon: Leaf },
-  { id: "learning", label: "सीखें", icon: BookOpen },
-  { id: "community", label: "समुदाय", icon: Users },
-  { id: "schemes", label: "योजनाएं", icon: Building2 },
+  { id: "dashboard", label: "dashboard", icon: BarChart3 },
+  { id: "weather", label: "weather", icon: Cloud },
+  { id: "crops", label: "crop_suggestions", icon: Leaf },
+  { id: "seed-bank", label: "seed_bank", icon: Sprout },
+  { id: "learning", label: "learn", icon: BookOpen },
+  { id: "community", label: "community", icon: Users },
+  { id: "schemes", label: "schemes", icon: Building2 },
 ];

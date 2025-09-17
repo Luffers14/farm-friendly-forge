@@ -3,6 +3,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { HeroSection } from "@/components/HeroSection";
 import { AuthForm } from "@/components/AuthForm";
 import { MainDashboard } from "@/components/MainDashboard";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 type AppState = "language" | "hero" | "auth" | "dashboard";
 
@@ -32,23 +33,25 @@ const Index = () => {
   };
 
   return (
-    <main>
-      {currentState === "language" && (
-        <LanguageSelector onLanguageSelect={handleLanguageSelect} />
-      )}
-      
-      {currentState === "hero" && (
-        <HeroSection onGetStarted={handleGetStarted} />
-      )}
-      
-      {currentState === "auth" && (
-        <AuthForm onAuthSuccess={handleAuthSuccess} />
-      )}
-      
-      {currentState === "dashboard" && (
-        <MainDashboard onLogout={handleLogout} />
-      )}
-    </main>
+    <LanguageProvider>
+      <main>
+        {currentState === "language" && (
+          <LanguageSelector onLanguageSelect={handleLanguageSelect} />
+        )}
+        
+        {currentState === "hero" && (
+          <HeroSection onGetStarted={handleGetStarted} />
+        )}
+        
+        {currentState === "auth" && (
+          <AuthForm onAuthSuccess={handleAuthSuccess} />
+        )}
+        
+        {currentState === "dashboard" && (
+          <MainDashboard onLogout={handleLogout} />
+        )}
+      </main>
+    </LanguageProvider>
   );
 };
 
