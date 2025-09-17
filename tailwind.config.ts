@@ -57,6 +57,30 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Agriculture-themed semantic colors
+        earth: {
+          DEFAULT: "hsl(var(--earth-brown))",
+          brown: "hsl(var(--earth-brown))",
+          soil: "hsl(var(--fertile-soil))",
+        },
+        crop: {
+          DEFAULT: "hsl(var(--crop-green))",
+          green: "hsl(var(--crop-green))",
+        },
+        harvest: {
+          DEFAULT: "hsl(var(--harvest-gold))",
+          gold: "hsl(var(--harvest-gold))",
+        },
+        sky: {
+          DEFAULT: "hsl(var(--sky-blue))",
+          blue: "hsl(var(--sky-blue))",
+        },
+      },
+      backgroundImage: {
+        'gradient-earth': 'var(--gradient-earth)',
+        'gradient-crop': 'var(--gradient-crop)',
+        'gradient-harvest': 'var(--gradient-harvest)',
+        'gradient-hero': 'var(--gradient-hero)',
       },
       borderRadius: {
         lg: "var(--radius)",
